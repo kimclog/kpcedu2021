@@ -1,0 +1,34 @@
+version: '3.0'
+services:
+  db1:
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+      MYSQL_TCP_PORT: 3000
+    volumes:
+      - ./db/mariadb1/:/var/lib/mysql
+  db2:
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+      MYSQL_TCP_PORT: 3000
+    volumes:
+      - ./db/mariadb2/:/var/lib/mysql
+  main:
+    build: ./main
+    image: myregistry.kpc.or.kr:5000/mypython:main
+    command: ["python", "./app.py"]
+    ports:
+      - 80:8000
+  api1:
+    build: ./api1
+    image: myregistry.kpc.or.kr:5000/mypython:api1
+    command: ["python", "./app.py"]
+    ports:
+      - 8081:8000
+  api2:
+    build: ./api2
+    image: myregistry.kpc.or.kr:5000/mypython:api2
+    command: ["python", "./app.py"]
+    ports:
+      - 8082:8000
