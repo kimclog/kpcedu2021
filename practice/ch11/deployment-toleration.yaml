@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-toleration
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      tolerations:
+      - key: alicek106/my-taint
+        value: dirty
+        operator: Equal
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        value: ""
+        operator: Equal
+        effect: NoSchedule
+      containers:
+      - name: nginx
+        image: nginx

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  nodeName: kube-master1
+  containers:
+  - name: nginx
+    image: nginx:latest

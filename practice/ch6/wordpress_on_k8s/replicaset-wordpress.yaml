@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: replicaset-wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-wordpress-pods-label
+  template:
+    metadata:
+      name: my-wordpress-pod
+      labels:
+        app: my-wordpress-pods-label
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:latest
+        envFrom:
+        - configMapRef:
+            name: wordpress-config
+        ports:
+        - containerPort: 80
+          protocol: TCP

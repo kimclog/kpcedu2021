@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-main
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: main
+  template:
+    metadata:
+      name: deployment-main
+      labels:
+        app: main
+    spec:
+      containers:
+      - name: deployment-main
+        image: myregistry.images.io:30000/mypython:main
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-api1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api1
+  template:
+    metadata:
+      name: deployment-api1
+      labels:
+        app: api1
+    spec:
+      containers:
+      - name: deployment-api1
+        image: myregistry.images.io:30000/mypython:api1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-api2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api2
+  template:
+    metadata:
+      name: deployment-api2
+      labels:
+        app: api2
+    spec:
+      containers:
+      - name: deployment-api2
+        image: myregistry.images.io:30000/mypython:api2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-db1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db1
+  template:
+    metadata:
+      name: deployment-db1
+      labels:
+        app: db1
+    spec:
+      containers:
+      - name: deployment-db1
+        image: mariadb:latest
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: example
+        - name: MYSQL_TCP_PORT
+          value: "3000"
+        volumeMounts:
+        - name: db1-volume
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: db1-volume
+        persistentVolumeClaim:
+          claimName: pvc-db1
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-db2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db2
+  template:
+    metadata:
+      name: deployment-db2
+      labels:
+        app: db2
+    spec:
+      containers:
+      - name: deployment-db2
+        image: mariadb:latest
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: example
+        - name: MYSQL_TCP_PORT
+          value: "3000"
+        volumeMounts:
+        - name: db2-volume
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: db2-volume
+        persistentVolumeClaim:
+          claimName: pvc-db2

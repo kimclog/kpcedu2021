@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myregistry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myregistry
+  template:
+    metadata:
+      name: mmyregistry
+      labels:
+        app: myregistry
+    spec:
+      containers:
+      - name: registry
+        image: registry:2.6
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        volumeMounts:
+        - name: myregistry-volume
+          mountPath: /var/lib/registry
+      volumes:
+      - name: myregistry-volume
+        persistentVolumeClaim:
+          claimName: myregistry-pvc
